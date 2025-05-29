@@ -90,7 +90,7 @@ const AboutUs = () => {
                   </div>
                   <Card.Body style={{...styles.cardBody, textAlign: 'center'}}>
                     <h3 style={styles.teamMemberName}>{member}</h3>
-                    <p style={styles.teamMemberRole}>Research Specialist</p>
+                
                   </Card.Body>
                 </Card>
               </Col>
@@ -99,33 +99,17 @@ const AboutUs = () => {
         </Container>
       </section>
 
-      {/* Features Section */}
-      <section style={styles.featuresSection}>
-        <Container>
-          <h2 style={{...styles.sectionTitle, textAlign: 'center'}}>Key Features</h2>
-          <div style={styles.featuresList}>
-            {[
-              'Instant paper summarization',
-              'Citation pattern analysis',
-              'Key term identification',
-              'Research trend tracking'
-            ].map((feature, index) => (
-              <div key={index} style={styles.featureItem}>
-                <i className="bi bi-check2-circle" style={styles.featureIcon}></i>
-                <span>{feature}</span>
-              </div>
-            ))}
-          </div>
-        </Container>
-      </section>
+      
 
       {/* CTA Section */}
       <section style={styles.ctaSection}>
         <Container style={{textAlign: 'center'}}>
           <h2 style={styles.ctaTitle}>Transform Your Research Process</h2>
           <Button style={styles.ctaButton}>
+
             Start Free Trial
           </Button>
+          
         </Container>
       </section>
     </div>

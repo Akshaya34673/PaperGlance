@@ -11,6 +11,7 @@
     "bcryptjs": "^3.0.2",
     "bootstrap": "^5.3.3",
     "express-validator": "^7.2.1",
+    "google-auth-library": "^9.15.1",
     "joi": "^17.13.3",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.13.2",

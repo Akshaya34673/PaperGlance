@@ -1,10 +1,17 @@
 # api_keys.py
 
 API_KEYS = [
-    "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",
-    "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",
-    "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",
-    "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",
-    "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",
-    "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",
+    "AIzaSyCR00T2Aj_wmeKitJXkaCF_wLkymgxtY5Q",
+    "AIzaSyBmHGK8zggWDznn94YHWRXPyyiVQk2qKjo",
+    "AIzaSyDQpOy1wUR-RClb3kDF6bv4z2eLMM8InEw",
+    "AIzaSyDU8PflD3bgg9JRggc4Xd4oeEvCn4vO6Hk",
+    "AIzaSyBHrIiU0eLzuvfzVLOYBBi6lCCx9QgK3q4",
+    "AIzaSyAMvGOKsqEmbqNRDgpqIgHy80cEmwBltgY",
+    "AIzaSyC6ixlmjSJh_G1RktwsGzk6KqHLIU65DXg",
+    "AIzaSyBLVgIqSmuFP7t2VvDdJouG2qiixbvMmwg",
+    "AIzaSyAhJ9JFhMS0HAGO2dGeChY84q1hQQMMelc",
+    "AIzaSyCkRM4MyqZ2B7t3EcM0L7M4juzHD3OYXWs",
+    "AIzaSyDgk4UHuPFKdUnQa28JEmsWceKltmqPVgQ",
 ]
+
+ 

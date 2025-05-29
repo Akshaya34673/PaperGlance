@@ -143,11 +143,11 @@ const Contact = () => {
                 </div>
 
                 <div style={styles.infoItem}>
-                  <i className="bi bi-geo-alt" style={styles.infoIcon}></i>
+                    
                   <div>
-                    <h3 style={styles.infoTitle}>Address</h3>
-                    <p style={styles.infoText}>Research Park, Innovation Drive</p>
-                    <p style={styles.infoText}>Tech City, TC 12345</p>
+                    <h3 style={styles.infoTitle}>You can also contact us at:</h3>
+                    <p style={styles.infoText}>instagram:PaperGlanceoffl_</p>
+                    <p style={styles.infoText}>linkedin:PaperGlance</p>
                   </div>
                 </div>
 

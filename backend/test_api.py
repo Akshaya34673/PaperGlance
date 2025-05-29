@@ -1,20 +1,31 @@
 import requests
 
-# Replace this with your actual API key
-key = "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"  # <-- Replace this with your actual API key
-headers = {
-    "Authorization": f"Bearer {key}",
-    "Content-Type": "application/json"
-}
+# Replace with your actual API key
+API_KEY = "AIzaSyBN3S4shI3dRq-P6bpmhGCA-3kxfDrVm4I"
+MODEL = "gemini-1.5-flash"
 
-payload = {
-    "model": "google/gemini-pro",
-    "messages": [{"role": "user", "content": "Hello, world"}]
-}
+def test_api(api_key):
+    url = f"https://generativelanguage.googleapis.com/v1beta/models/{MODEL}:generateContent?key={api_key}"
+    headers = {"Content-Type": "application/json"}
+    payload = {
+        "contents": [
+            {
+                "parts": [
+                    {"text": "Hello, can you respond?"}
+                ]
+            }
+        ]
+    }
+    try:
+        response = requests.post(url, headers=headers, json=payload, timeout=10)
+        if response.status_code == 200:
+            print("✅ API key is working!")
+            print("Response:", response.json()["candidates"][0]["content"]["parts"][0]["text"])
+        else:
+            print(f"❌ API key failed. Status: {response.status_code}")
+            print("Response:", response.text)
+    except Exception as e:
+        print("❌ Error during API call:", str(e))
 
-# Send the test request to the API
-r = requests.post("https://openrouter.ai/api/v1/chat/completions", headers=headers, json=payload)
-
-# Print out the response status and the content of the response
-print("Response Status Code:", r.status_code)
-print("Response JSON:", r.json())
+if __name__ == "__main__":
+    test_api(API_KEY)

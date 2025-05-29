@@ -3,8 +3,10 @@ import "./Login.css";
 import LoginImg from "../Login.png";
 import Typed from 'typed.js';
 import { Container, Row, Col, Form, Button } from 'react-bootstrap';
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { GoogleLogin } from '@react-oauth/google';
+import { loginUser } from '../api'; // Import the loginUser function from api.js
+
 const Login = () => {
   const navigate = useNavigate();
   const [isLogin, setIsLogin] = useState(true);
@@ -43,51 +45,77 @@ const Login = () => {
     e.preventDefault();
     setLoading(true);
     setError("");
-  
-    // ✅ Validation only for signup
+
+    // Validation for signup
     if (!isLogin) {
       if (!formData.email) {
         setError("Email is required for signup.");
         setLoading(false);
         return;
       }
-  
       if (formData.password !== formData.confirmPassword) {
         setError("Passwords don't match.");
         setLoading(false);
         return;
       }
     }
-  
+
     try {
       if (isLogin) {
-        // ✅ Login API - no email needed
-        const response = await axios.post("http://localhost:8080/api/auth", {
-          username: formData.username,
-          password: formData.password,
-        });
-        alert(response.data.message);
-        navigate("/"); // Redirect to homepage
+        // Use loginUser from api.js for login
+        const { token } = await loginUser(formData.username, formData.password);
+        localStorage.setItem("token", token);
+        alert("Login successful!");
+        navigate("/profile");
       } else {
-        // ✅ Signup API - email required
-        const response = await axios.post("http://localhost:8080/api/users", {
-          username: formData.username,
-          email: formData.email,
-          password: formData.password,
+        // Signup API
+        const response = await fetch("http://localhost:8080/api/users", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            username: formData.username,
+            email: formData.email,
+            password: formData.password,
+          }),
         });
-        alert(response.data.message);
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.detail || "Signup failed");
+        }
+        const data = await response.json();
+        alert(data.message);
         setIsLogin(true); // Switch to login mode after signup
         setFormData({ username: "", email: "", password: "", confirmPassword: "" });
       }
     } catch (err) {
       console.error(err);
-      setError(err.response?.data?.message || "Something went wrong. Please try again.");
+      setError(err.message || "Something went wrong. Please try again.");
     } finally {
       setLoading(false);
     }
   };
-  
-  
+
+  const handleGoogleSuccess = async (credentialResponse) => {
+    try {
+      const token = credentialResponse.credential;
+      const response = await fetch("http://localhost:8080/api/auth/google", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ token }),
+      });
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.detail || "Google login failed");
+      }
+      const data = await response.json();
+      localStorage.setItem("token", data.token);
+      alert("Google login successful!");
+      navigate("/profile");
+    } catch (err) {
+      console.error("Google login error:", err);
+      setError(err.message || "Google login failed");
+    }
+  };
 
   return (
     <div className="login-page">
@@ -101,9 +129,9 @@ const Login = () => {
                 <div className="shape shape-2"></div>
                 <div className="shape shape-3"></div>
               </div>
-              <img 
-                src={LoginImg} 
-                alt="Research Illustration" 
+              <img
+                src={LoginImg}
+                alt="Research Illustration"
                 className="illustration-img"
               />
             </div>
@@ -113,17 +141,17 @@ const Login = () => {
           <Col md={6} className="form-column">
             <div className="form-container">
               <div className="form-header">
-                <img 
-                  src={process.env.PUBLIC_URL + "/logopaperglance1.jpg"} 
-                  alt="PaperGlance Logo" 
+                <img
+                  src={process.env.PUBLIC_URL + "/logopaperglance1.jpg"}
+                  alt="PaperGlance Logo"
                   className="form-logo"
                 />
                 <h1 className="form-title">
                   <span className="typing-text"></span>
                 </h1>
                 <p className="form-subtitle">
-                  {isLogin 
-                    ? "Sign in to access your research dashboard" 
+                  {isLogin
+                    ? "Sign in to access your research dashboard"
                     : "Create your account to get started"}
                 </p>
               </div>
@@ -134,12 +162,12 @@ const Login = () => {
                     <Form.Label>Email Address</Form.Label>
                     <Form.Control
                       type="email"
-                      id="email"
                       name="email"
                       value={formData.email}
                       onChange={handleChange}
                       placeholder="Enter your email"
                       required
+                      autoComplete="email" // Added for accessibility
                     />
                   </Form.Group>
                 )}
@@ -148,12 +176,12 @@ const Login = () => {
                   <Form.Label>Username</Form.Label>
                   <Form.Control
                     type="text"
-                    id="username"
                     name="username"
                     value={formData.username}
                     onChange={handleChange}
                     placeholder="Enter your username"
                     required
+                    autoComplete="username" // Added for accessibility
                   />
                 </Form.Group>
 
@@ -166,6 +194,7 @@ const Login = () => {
                     onChange={handleChange}
                     placeholder="Enter your password"
                     required
+                    autoComplete="current-password" // Added to fix warning
                   />
                 </Form.Group>
 
@@ -174,12 +203,12 @@ const Login = () => {
                     <Form.Label>Confirm Password</Form.Label>
                     <Form.Control
                       type="password"
-                      id="confirmPassword"
                       name="confirmPassword"
                       value={formData.confirmPassword}
                       onChange={handleChange}
                       placeholder="Confirm your password"
-                      required={!isLogin}
+                      required
+                      autoComplete="new-password" // Added for accessibility
                     />
                   </Form.Group>
                 )}
@@ -212,6 +241,15 @@ const Login = () => {
                     isLogin ? "Login" : "Sign Up"
                   )}
                 </Button>
+
+                {isLogin && (
+                  <div className="mt-4 text-center">
+                    <GoogleLogin
+                      onSuccess={handleGoogleSuccess}
+                      onError={() => setError("Google login failed")}
+                    />
+                  </div>
+                )}
 
                 <div className="auth-toggle text-center mt-4">
                   {isLogin ? "Don't have an account? " : "Already have an account? "}
