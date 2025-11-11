@@ -71,6 +71,7 @@ Development Tools: Google Colab – Model testing and fine-tuning
 <img width="519" height="374" alt="image" src="https://github.com/user-attachments/assets/696bed9a-f609-471b-a4b2-a6ce51e06ae8" />
 
 🔄 Workflow
+
 User logs in (via credentials or Google account).
 Uploads a research paper (PDF/DOC).
 Text is extracted and split into chunks.
@@ -82,22 +83,36 @@ User can listen, download, or interact with the summary using the chatbot.
 
 
 🧾 API Endpoints (Simplified)
+
 Endpoint	Method	Description
+
 /api/users	POST	Register new user
+
 /api/login	POST	User login
+
 /api/auth/google	POST	Google Sign-In
+
 /api/upload	POST	Upload PDF/DOC for summarization
+
 /api/summarize	POST	Generate AI summary
+
 /api/define	POST	Get academic word meaning
+
 /api/summaries	GET	Fetch user history
+
 /api/summaries/{id}	DELETE	Delete summary
+
 /api/logout	POST	Logout user
 
 
 🗂️ Database Design (MongoDB)
+
 Collections:
+
 users → Stores user credentials, profiles, and tokens
+
 summaries → Stores uploaded paper data, summaries, and timestamps
+
 queries → Stores chatbot interactions (Q&A history)
 
 🧑‍💻 Setup Instructions
@@ -116,6 +131,7 @@ npm install
 npm start
 
 4️⃣ Environment Variables
+
 Create a .env file in your backend folder:
 
 MONGO_URI=your_mongodb_connection_string
@@ -123,6 +139,7 @@ JWT_SECRET=your_secret_key
 GEMINI_API_KEYS=your_api_keys_comma_separated
 
 🏗️ Project Outcome
+
 ✅ Developed a fully functional, AI-driven web app for summarizing research papers.
 ✅ Successfully integrated RAG architecture with Google Gemini Pro for contextual understanding.
 ✅ Achieved multilingual summarization (e.g., Telugu → English).
